@@ -1,0 +1,13 @@
+# Ignore les modules partout (backend et frontend)
+**/node_modules/
+**/dist/
+**/build/
+
+# Ignore les fichiers d'environnement partout
+**/.env
+**/.env.local
+**/.env.production
+
+# Logs et système
+**/.DS_Store
+**/*.log

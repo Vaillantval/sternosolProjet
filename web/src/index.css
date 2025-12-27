@@ -1,0 +1,645 @@
+:root {
+  /* Palette de couleurs "Fintech" */
+  --primary-color: #2563eb;       /* Bleu moderne */
+  --primary-hover: #1d4ed8;       /* Bleu plus foncé au survol */
+  --secondary-color: #64748b;     /* Gris bleuté pour les textes secondaires */
+  --background-color: #f1f5f9;    /* Gris très clair pour le fond de page */
+  --card-bg: #ffffff;             /* Blanc pur pour les cartes */
+  --text-main: #1e293b;           /* Noir doux pour le texte */
+  --danger-color: #ef4444;        /* Rouge pour les erreurs/annulations */
+  --success-color: #10b981;       /* Vert pour le succès */
+  
+  /* Ombres modernes */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Mises en page (Layouts) --- */
+
+/* Conteneur principal centré */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); /* Dégradé subtil */
+}
+
+/* Variante pour le Dashboard (Optionnel: Fond plus foncé) */
+.page-dashboard {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: white;
+}
+
+/* --- Composants (Cards) --- */
+
+.card, .group-card, form {
+  background-color: var(--card-bg);
+  border-radius: 16px; /* Coins bien arrondis */
+  padding: 40px;
+  width: 100%;
+  max-width: 450px; /* Largeur max élégante */
+  box-shadow: var(--shadow-lg); /* Effet de profondeur */
+  margin-bottom: 20px;
+  text-align: center;
+  transition: transform 0.2s ease;
+  color: var(--text-main); /* Force le texte en noir même sur fond dashboard */
+}
+
+/* Petit effet au survol des cartes */
+.group-card:hover {
+  transform: translateY(-5px);
+}
+
+/* --- Titres --- */
+h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: inherit;
+}
+
+h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+p {
+  margin-bottom: 10px;
+  color: var(--secondary-color);
+}
+
+/* --- Formulaires & Inputs --- */
+
+input, select {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 8px 0 20px 0;
+  display: inline-block;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Halo bleu */
+  background-color: white;
+}
+
+/* --- Boutons --- */
+
+button {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 14px 20px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: var(--shadow-sm);
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+}
+
+button:active {
+  transform: scale(0.98); /* Petit clic réaliste */
+}
+
+/* Bouton secondaire (Annuler / Déconnexion) */
+button.btn-secondary, button[onClick*="accueil"] {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 1px solid #cbd5e1;
+  box-shadow: none;
+}
+
+button.btn-secondary:hover, button[onClick*="accueil"]:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+/* Bouton Stripe spécifique */
+button[onClick*="stripe"] {
+  background-color: #635bff; /* Couleur officielle Stripe */
+}
+button[onClick*="stripe"]:hover {
+  background-color: #4e44e0;
+}
+
+/* Bouton Offline spécifique */
+button[onClick*="offline"] {
+  background-color: var(--success-color);
+}
+button[onClick*="offline"]:hover {
+  background-color: #059669;
+}
+
+/* --- Utilitaires --- */
+.payment-options {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+  margin-top: 20px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: #e2e8f0;
+  margin: 20px 0;
+}
+
+/* --- STYLE SPÉCIFIQUE ACCUEIL --- */
+
+/* Fond spécifique pour l'accueil (optionnel) */
+.page-accueil {
+  background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
+}
+
+/* Carte d'accueil plus large et aérée */
+.hero-card {
+  background: white;
+  border-radius: 20px;
+  padding: 50px 30px;
+  max-width: 600px; /* Limite la largeur globale */
+  width: 90%;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1); /* Belle ombre douce */
+  text-align: center;
+}
+
+.hero-card h1 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+/* Gestion de l'image */
+.image-container {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-image {
+  max-width: 250px; /* Empêche l'image d'être géante */
+  width: 100%;
+  height: auto;
+  border-radius: 50%; /* Image ronde (très moderne) */
+  /* Si tu préfères l'image carrée avec coins ronds, met border-radius: 15px; */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  object-fit: cover; /* Assure que l'image n'est pas déformée */
+  aspect-ratio: 1 / 1; /* Force un carré parfait si border-radius: 50% */
+}
+
+/* Groupe des boutons principaux (Login/Inscription) */
+.button-group {
+  display: flex;
+  gap: 15px; /* Espace entre les boutons */
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Surcharge pour que les boutons ne prennent pas 100% ici */
+.hero-card button {
+  width: auto; /* Le bouton s'adapte au texte */
+  min-width: 140px; /* Mais garde une taille minimale */
+  margin: 0;
+}
+
+/* Style bouton secondaire (S'inscrire) */
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline:hover {
+  background-color: #eff6ff;
+  color: var(--primary-hover);
+}
+
+/* Style bouton lien (Quitter) */
+.btn-link {
+  background: none;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  box-shadow: none;
+  text-decoration: underline;
+  padding: 5px;
+  min-width: auto !important; /* Pas de largeur mini pour ce lien */
+}
+
+.btn-link:hover {
+  background: none;
+  color: var(--danger-color);
+}
+
+/* RESPONSIVE : Sur mobile, on remet les boutons l'un sur l'autre */
+@media (max-width: 500px) {
+  .button-group {
+    flex-direction: column;
+  }
+  .hero-card button {
+    width: 100%;
+  }
+}
+/* =========================================
+   4. STRUCTURE DASHBOARD MEMBER (PLEIN ÉCRAN)
+   ========================================= */
+
+/* Conteneurs prenant toute la largeur */
+.dashboard-header,
+.stats-grid,
+.dashboard-content {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 40px; /* Marges de sécurité */
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  margin-top: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #cbd5e1; /* Ligne un peu plus visible */
+}
+.dashboard-header h2 { font-size: 1.8rem; color: #1e293b; margin: 0; }
+.subtitle { font-size: 1.1rem; color: #64748b; margin-top: 5px; }
+
+/* Grille Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+/* Contenu Principal (Colonnes) */
+.dashboard-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  align-items: flex-start;
+  padding-bottom: 50px;
+}
+
+/* Colonne Gauche (Profil + Action) */
+.left-column {
+  flex: 1;
+  min-width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Colonne Droite (Historique) */
+.history-card {
+  flex: 2;
+  min-width: 500px;
+}
+
+/* =========================================
+   5. CARTES DU DASHBOARD
+   ========================================= */
+
+/* Style commun : Fond blanc pour contraster avec le fond gris de la page */
+.stat-card, .profile-card, .action-card, .history-card {
+  background-color: #ffffff !important;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover, .profile-card:hover, .action-card:hover, .history-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+/* --- Stats --- */
+.stat-card { display: flex; align-items: center; gap: 20px; }
+.stat-icon { font-size: 2.5rem; background: #e0f2fe; color: #0284c7; padding: 15px; border-radius: 50%; }
+.stat-info h4 { margin: 0; font-size: 0.9rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-info p { margin: 0; font-size: 1.8rem; font-weight: bold; color: #0f172a; }
+
+/* --- Profil --- */
+.profile-card h3, .action-card h3, .history-card h3 {
+  margin-bottom: 20px; font-size: 1.25rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; color: #0f172a;
+}
+.profile-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f8fafc; }
+.profile-label { color: #64748b; }
+.profile-value { font-weight: 600; color: #334155; }
+.divider { border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0; }
+
+/* --- Action (Paiement) --- */
+.action-card { border-left: 5px solid var(--primary-color) !important; }
+.payment-options { background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px dashed #cbd5e1; }
+
+/* --- Historique --- */
+.history-table { width: 100%; border-collapse: separate; margin-top: 10px; border-spacing: 0; }
+.history-table th { text-align: left; color: #64748b; padding: 12px 15px; border-bottom: 2px solid #e2e8f0; font-size: 0.85rem; text-transform: uppercase; }
+.history-table td { padding: 15px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+.period-tag { background: #eff6ff; color: #2563eb; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem; }
+
+/* Badges */
+.badge { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; display:inline-block; }
+.badge-success { background: #dcfce7; color: #166534; }
+.badge-warning { background: #fef9c3; color: #854d0e; }
+.badge-danger { background: #fee2e2; color: #991b1b; }
+
+/* =========================================
+   6. INPUTS & BOUTONS
+   ========================================= */
+
+input, select {
+  width: 100%; padding: 12px; margin: 8px 0 20px 0;
+  border: 1px solid var(--border-color); border-radius: 8px; background: #f8fafc;
+}
+input:focus { outline: none; border-color: var(--primary-color); background: white; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
+button {
+  width: 100%; padding: 12px 20px; border-radius: 8px; border: none;
+  cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 1rem; margin-bottom: 10px;
+}
+
+/* Bouton Principal */
+.btn-primary { background-color: var(--primary-color); color: white; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3); }
+.btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+
+/* Bouton Secondaire (S'inscrire, Retour) */
+.btn-secondary, .btn-outline { 
+  background: white; color: var(--primary-color); border: 1px solid var(--primary-color); width: auto; 
+}
+.btn-secondary:hover, .btn-outline:hover { background: #eff6ff; }
+
+/* Boutons Paiement (Couleurs Vives Restaurées) */
+.btn-stripe { background-color: #635bff !important; color: white !important; box-shadow: 0 4px 10px rgba(99, 91, 255, 0.3); }
+.btn-stripe:hover { background-color: #4e44e0 !important; transform: translateY(-2px); }
+
+.btn-offline { background-color: #10b981 !important; color: white !important; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
+.btn-offline:hover { background-color: #059669 !important; transform: translateY(-2px); }
+
+.btn-cancel { background-color: #f1f5f9 !important; color: #64748b !important; border: 1px solid #cbd5e1 !important; }
+.btn-cancel:hover { background-color: #e2e8f0 !important; color: #333 !important; }
+
+/* Bouton Déconnexion (Rouge Outline en bas) */
+.btn-logout {
+  background-color: transparent !important; color: #ef4444 !important; border: 1px solid #ef4444 !important; margin-top: 15px;
+}
+.btn-logout:hover { background-color: #fef2f2 !important; }
+
+/* Lien simple */
+.btn-link { background: none; color: #94a3b8; font-size: 0.9rem; text-decoration: underline; padding: 0; min-width: auto; margin-top: 10px; display: inline-block; }
+.btn-link:hover { color: #ef4444; background: none; }
+
+/* =========================================
+   7. RESPONSIVE
+   ========================================= */
+@media (max-width: 900px) {
+  .dashboard-content { flex-direction: column; }
+  .left-column, .history-card { width: 100%; min-width: 100%; }
+  .dashboard-header, .stats-grid, .dashboard-content { padding: 0 20px; }
+  form, .hero-card { width: 95%; padding: 30px 20px; }
+  .button-group { flex-direction: column; }
+  .hero-card button { width: 100%; }
+}
+
+/* =========================================
+   8. SECTION ADMIN (Back-Office)
+   ========================================= */
+
+/* --- Layout Principal Vertical (Pleine Largeur) --- */
+.dashboard-content-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Espace Vertical entre les lignes */
+  
+  width: 100%;
+  max-width: 100%; /* Prend toute la largeur de l'écran */
+  
+  /* C'est ici que la magie opère pour l'espacement égal */
+  padding: 0 40px; /* Espace Gauche/Droite = 40px */
+  margin: 0;
+  box-sizing: border-box; /* Important pour que le padding ne casse pas la largeur */
+}
+
+/* --- Conteneur Ligne (Validation + Transfert) --- */
+.admin-row {
+  display: flex;
+  width: 100%;
+  
+  /* Espace Central = 40px (Identique au padding du conteneur) */
+  gap: 40px; 
+  align-items: stretch; 
+}
+
+/* Force les cartes à prendre 50% chacune */
+.admin-row .card {
+  flex: 1; 
+  margin-bottom: 0;
+  min-width: 350px;
+}
+
+/* --- Section Historique (Prend toute la largeur) --- */
+/* Comme elle est dans le conteneur vertical, elle s'alignera parfaitement avec les cartes du haut */
+.dashboard-content-vertical .history-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* --- Correction Tableau (Infos qui dépassent) --- */
+.history-table {
+  width: 100%;
+  table-layout: fixed; /* Force le tableau à respecter la largeur */
+  border-collapse: collapse;
+}
+
+.history-table th, .history-table td {
+  padding: 15px 12px; /* Un peu plus d'espace interne */
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  vertical-align: middle;
+}
+
+/* RESPONSIVE : Sur tablette/mobile (< 1100px) */
+@media (max-width: 1100px) {
+  .dashboard-content-vertical {
+    padding: 0 20px; /* On réduit les marges sur petit écran */
+  }
+  .admin-row {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+/* --- Styles Cartes Admin --- */
+.card-validation {
+  border-left: 5px solid #f59e0b !important;
+}
+
+.card-transfer {
+  border-left: 5px solid #2563eb !important;
+}
+
+/* --- Boutons d'action Admin --- */
+.btn-admin-small {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+  width: auto;
+  display: inline-block;
+  color: white !important;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn-admin-small:active { transform: scale(0.95); }
+
+.btn-validate { background-color: #10b981; }
+.btn-validate:hover { background-color: #059669; }
+
+.btn-reject { background-color: #ef4444; }
+.btn-reject:hover { background-color: #dc2626; }
+
+.btn-transfer { background-color: #2563eb; }
+.btn-transfer:hover { background-color: #1d4ed8; }
+
+.btn-undo {
+  background-color: #64748b;
+  margin-left: 5px;
+}
+.btn-undo:hover { background-color: #475569; }
+
+/* --- Liens & Badges --- */
+.link-receipt {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.link-receipt:hover { color: #1e40af; }
+
+.badge-transferred {
+  background-color: #2563eb;
+  color: white;
+}
+
+/* =========================================
+   9. SECTION LISTE DES GROUPES (MemberView)
+   ========================================= */
+
+/* Grille responsive */
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Carte Moderne pour un Groupe */
+.group-card-modern {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.group-card-modern:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  border-color: #2563eb;
+}
+
+/* En-tête de la carte */
+.card-header-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.card-header-group h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #1e293b;
+}
+
+/* Corps de la carte (Infos) */
+.info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.info-row .icon {
+  font-size: 1.5rem;
+  margin-right: 15px;
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.info-row div {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row .label {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-row strong {
+  font-size: 1.1rem;
+  color: #0f172a;
+}

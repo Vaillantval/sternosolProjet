@@ -1,0 +1,8 @@
+{
+    "javascript.validate.enable": false,
+    "typescript.disableAutomaticTypeAcquisition": true,
+    "typescript.validate.enable": false,
+    "files.associations": {
+        "*.mjs": "javascript"
+    }
+}
