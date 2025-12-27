@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 
 function AdminDashboard({ onNavigate }) {
+  // 1. DÉFINITION DE L'URL API (Local ou Prod)
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const [groupe, setGroupe] = useState(null);
   const [payments, setPayments] = useState([]);
   const [participants, setParticipants] = useState([]);
@@ -16,17 +19,18 @@ function AdminDashboard({ onNavigate }) {
 
   const loadAdminData = async () => {
     try {
-      const groupRes = await fetch("http://localhost:5000/api/groupes");
+      // 2. UTILISATION DE API_URL
+      const groupRes = await fetch(`${API_URL}/api/groupes`);
       const groupData = await groupRes.json();
       const myGroup = groupData.find(g => g.createdBy === userEmail);
       
       if (!myGroup) { setLoading(false); return; }
       setGroupe(myGroup);
 
-      const membersRes = await fetch(`http://localhost:5000/api/paiement/members/${myGroup.id}`);
+      const membersRes = await fetch(`${API_URL}/api/paiement/members/${myGroup.id}`);
       const membersData = await membersRes.json();
       
-      const payRes = await fetch("http://localhost:5000/api/paiement/all");
+      const payRes = await fetch(`${API_URL}/api/paiement/all`);
       const payData = await payRes.json();
       
       if (Array.isArray(payData)) {
@@ -72,7 +76,7 @@ function AdminDashboard({ onNavigate }) {
       const potAmount = groupe.frequence * groupe.montantParPeriode;
       if (!window.confirm(`CONFIRMATION : Verser le pot de ${potAmount}$ à ${user.nom} ?`)) return;
       try {
-          const res = await fetch("http://localhost:5000/api/paiement/payout", {
+          const res = await fetch(`${API_URL}/api/paiement/payout`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ userId: user.id, groupeId: groupe.id, amount: potAmount })
@@ -96,7 +100,7 @@ function AdminDashboard({ onNavigate }) {
 
   const apiUpdateStatus = async (paymentId, status) => {
       try {
-        const res = await fetch("http://localhost:5000/api/paiement/update-status", {
+        const res = await fetch(`${API_URL}/api/paiement/update-status`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ paymentId, status })
@@ -174,7 +178,8 @@ function AdminDashboard({ onNavigate }) {
                                         <strong style={{color:'#166534'}}>+{p.amount} $</strong>
                                     </td>
                                     <td>
-                                        {p.filePath ? <a href={`http://localhost:5000/uploads/${p.filePath}`} target="_blank" rel="noreferrer" className="link-receipt">📄 Voir</a> : "-"}
+                                        {/* Utilisation de API_URL aussi pour les images */}
+                                        {p.filePath ? <a href={`${API_URL}/uploads/${p.filePath}`} target="_blank" rel="noreferrer" className="link-receipt">📄 Voir</a> : "-"}
                                     </td>
                                     <td>
                                         <button className="btn-admin-small btn-validate" onClick={() => handleValidation(p.id, 'validé')}>✅</button>

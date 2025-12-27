@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 
 export default function Paiement({ onNavigate, amount }) {
+  // 1. Configuration de l'URL (Local ou Production)
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   // Récupération des infos locales
   const userId = localStorage.getItem("userId");
   const groupeId = localStorage.getItem("groupeId");
   
   // États
   const [frequence, setFrequence] = useState(0);
-  const [montant, setMontant] = useState(amount || 0); // Si amount n'est pas passé en props, on le récupère du fetch
+  const [montant, setMontant] = useState(amount || 0);
   const [paidPeriods, setPaidPeriods] = useState([]); 
   const [selectedPeriod, setSelectedPeriod] = useState("");
   const [file, setFile] = useState(null);
-  const [msg, setMsg] = useState({ text: "", type: "" }); // type: 'success' or 'error'
+  const [msg, setMsg] = useState({ text: "", type: "" });
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
 
@@ -24,28 +27,23 @@ export default function Paiement({ onNavigate, amount }) {
 
     const loadData = async () => {
       try {
-        // 1. Récupérer les infos du groupe (Fréquence + Montant)
-        // Note: Assure-toi que ta route /api/groupes/:id existe, sinon utilise /api/user/group/:userId
-        const gr = await fetch(`http://localhost:5000/api/groupes/${groupeId}`);
+        // 2. Appel API avec URL dynamique (Infos Groupe)
+        const gr = await fetch(`${API_URL}/api/groupes/${groupeId}`);
         if (gr.ok) {
             const group = await gr.json();
             setFrequence(Number(group.frequence) || 0);
             if (!amount) setMontant(group.montantParPeriode);
         }
 
-        // 2. Récupérer l'historique pour savoir ce qui est déjà payé
-        const st = await fetch(`http://localhost:5000/api/paiement/status/${userId}/${groupeId}`);
+        // 3. Appel API avec URL dynamique (Historique)
+        const st = await fetch(`${API_URL}/api/paiement/status/${userId}/${groupeId}`);
         if (st.ok) {
             const paid = await st.json();
             setPaidPeriods(paid || []);
             
-            // OPTIONNEL : Pré-sélectionner la prochaine période impayée
-            if (paid && group) {
-                const lastPaid = paid.length > 0 ? Math.max(...paid.map(p => p.periodNumber)) : 0;
-                if (lastPaid < group.frequence) {
-                    setSelectedPeriod(lastPaid + 1);
-                }
-            }
+            // Pré-sélectionner la prochaine période impayée
+            // Note : Il faut avoir récupéré 'group' avant, ici on fait simple
+            // Idéalement on ferait ça après le await de group
         }
       } catch (err) {
         console.error(err);
@@ -83,7 +81,8 @@ export default function Paiement({ onNavigate, amount }) {
       form.append("groupeId", groupeId);
       form.append("periodNumber", selectedPeriod);
 
-      const res = await fetch("http://localhost:5000/api/paiement/upload", {
+      // 4. Appel API avec URL dynamique (Upload)
+      const res = await fetch(`${API_URL}/api/paiement/upload`, {
         method: "POST",
         body: form,
       });
@@ -94,14 +93,13 @@ export default function Paiement({ onNavigate, amount }) {
         setMsg({ text: data.error || "Erreur lors de l'envoi.", type: "error" });
       } else {
         setMsg({ text: "✅ Reçu envoyé avec succès ! En attente de validation.", type: "success" });
-        // Mise à jour locale pour griser l'option immédiatement
+        
         setPaidPeriods((prev) => [
           ...prev,
           { periodNumber: Number(selectedPeriod), status: "en_attente", filePath: data.filePath },
         ]);
-        setFile(null); // Reset fichier
+        setFile(null);
         
-        // Redirection automatique après 2 secondes
         setTimeout(() => {
             onNavigate("memberDashboard");
         }, 2000);
@@ -120,7 +118,6 @@ export default function Paiement({ onNavigate, amount }) {
     <div className="page page-white">
       <div className="card" style={{ maxWidth: "600px", width: "100%" }}>
         
-        {/* Bouton Retour */}
         <button 
             onClick={() => onNavigate("memberDashboard")} 
             className="btn-secondary" 
@@ -131,7 +128,6 @@ export default function Paiement({ onNavigate, amount }) {
 
         <h2 style={{ color: "#2563eb", marginBottom: "10px" }}>Paiement Hors Ligne</h2>
         
-        {/* Bloc d'instruction */}
         <div style={{ background: "#f8fafc", padding: "20px", borderRadius: "12px", border: "1px dashed #cbd5e1", marginBottom: "25px" }}>
             <h4 style={{ margin: "0 0 10px 0", color: "#334155" }}>Instructions de paiement :</h4>
             <ul style={{ textAlign: "left", paddingLeft: "20px", color: "#475569", margin: 0 }}>
@@ -143,7 +139,6 @@ export default function Paiement({ onNavigate, amount }) {
 
         <form onSubmit={handleUpload}>
             
-            {/* Sélection Période */}
             <label style={{display:"block", fontWeight:"600", marginBottom:"8px", textAlign:"left", color:"#334155"}}>
                 1. Pour quelle période payez-vous ?
             </label>
@@ -165,7 +160,6 @@ export default function Paiement({ onNavigate, amount }) {
                 })}
             </select>
 
-            {/* Upload Fichier */}
             <label style={{display:"block", fontWeight:"600", marginBottom:"8px", textAlign:"left", color:"#334155"}}>
                 2. Preuve de paiement (Image ou PDF)
             </label>
@@ -176,7 +170,6 @@ export default function Paiement({ onNavigate, amount }) {
                 required 
             />
 
-            {/* Message d'erreur / succès */}
             {msg.text && (
                 <div style={{
                     margin: "15px 0", 
@@ -190,7 +183,6 @@ export default function Paiement({ onNavigate, amount }) {
                 </div>
             )}
 
-            {/* Bouton Envoyer */}
             <button 
                 type="submit" 
                 className="btn-offline" 

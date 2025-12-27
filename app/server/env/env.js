@@ -12,5 +12,6 @@ export const {
     DB_PASSWORD,
     DB_NAME,
     STRIPE_SECRET_KEY,
+    //pour developement local
     STRIPE_WEBHOOK_SECRET
 } = process.env

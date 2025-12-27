@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 
 export default function Dashboard({ onNavigate }) {
+  // 1. Configuration de l'URL (Local ou Production)
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/api/groups/1/dashboard", {
+    
+    // 2. Utilisation de la variable API_URL dans le fetch
+    fetch(`${API_URL}/api/groups/1/dashboard`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
-      .then(setData);
+      .then(setData)
+      .catch(err => console.error("Erreur chargement dashboard:", err));
   }, []);
 
   if (!data) return <p>Chargement...</p>;

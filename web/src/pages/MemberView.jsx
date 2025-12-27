@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 
 function MemberView({ onNavigate }) {
+  // 1. Configuration de l'URL (Local ou Production)
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const [groupes, setGroupes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [joiningId, setJoiningId] = useState(null); // Pour gérer l'état de chargement du bouton
+  const [joiningId, setJoiningId] = useState(null);
 
   const userId = localStorage.getItem("userId");
   const userNom = localStorage.getItem("userNom") || "Membre";
@@ -12,13 +15,13 @@ function MemberView({ onNavigate }) {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/groupes");
+        // 2. Appel API avec URL dynamique
+        const res = await fetch(`${API_URL}/api/groupes`);
         const data = await res.json();
-        // On peut filtrer ici pour ne montrer que les groupes "Actif" ou "En attente" si besoin
         setGroupes(data);
       } catch (err) {
         console.error(err);
-        alert("Impossible de charger les groupes");
+        alert("Impossible de charger les groupes. Vérifiez votre connexion.");
       } finally {
         setLoading(false);
       }
@@ -34,10 +37,11 @@ function MemberView({ onNavigate }) {
         return; 
     }
     
-    setJoiningId(groupe.id); // Active le chargement sur ce bouton spécifique
+    setJoiningId(groupe.id);
 
     try {
-      const res = await fetch("http://localhost:5000/api/participer", {
+      // 3. Appel API avec URL dynamique
+      const res = await fetch(`${API_URL}/api/participer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, groupeId: groupe.id })
@@ -46,23 +50,22 @@ function MemberView({ onNavigate }) {
       const data = await res.json();
       
       if (!res.ok) { 
-          alert(data.error || "Erreur lors de la participation"); 
-          setJoiningId(null);
-          return; 
+          throw new Error(data.error || "Erreur lors de la participation");
       }
 
-      // Succès : On sauvegarde et on redirige vers le Dashboard
+      // Succès
       localStorage.setItem("groupeId", groupe.id);
       localStorage.setItem("groupeChoisi", JSON.stringify(groupe));
       
       alert(`Félicitations ! Vous avez rejoint "${groupe.nomSol}".`);
       
-      // 🔥 REDIRECTION VERS LE DASHBOARD MEMBRE
+      // Redirection vers le Dashboard Membre
       onNavigate("memberDashboard");
 
     } catch (err) {
       console.error(err);
-      alert("Impossible de contacter le serveur.");
+      alert(err.message || "Impossible de contacter le serveur.");
+    } finally {
       setJoiningId(null);
     }
   };
